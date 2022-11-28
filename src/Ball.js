@@ -1,14 +1,17 @@
-const INITIAL_VELOCITY = 0.25;
-const VELOCITY_INCREASE = 0.0001;
 const TWO_PI = Math.PI * 2;
 const COMPUTER_MOVE = "computer";
 const PLAYER_MOVE = "player";
 
 export class Ball {
-    constructor(ctx, height, width) {
+    constructor(ctx, height, width, DIFFICULTY) {
         this.ctx = ctx;
         this.game_height = height;
         this.game_width = width;
+        this.DIFFICULTY = DIFFICULTY;
+
+        this.INITIAL_VELOCITY = width / this.DIFFICULTY.ball_speed;
+        this.VELOCITY_INCREASE = this.INITIAL_VELOCITY / this.DIFFICULTY.ball_speed_increase;
+
         this.reset();
     }
     reset() {
@@ -21,7 +24,7 @@ export class Ball {
             const heading = randomNumberBetween(0, TWO_PI);
             this.direction = { x: Math.cos(heading), y: Math.sin(heading) };
         }
-        this.velocity = INITIAL_VELOCITY;
+        this.velocity = this.INITIAL_VELOCITY;
     }
     draw() {
         this.ctx.fillStyle = "white";
@@ -34,8 +37,8 @@ export class Ball {
         const colides_with_computer = checkCollision(this, computer_paddle);
         this.x += this.velocity * this.direction.x * delta;
         this.y += this.velocity * this.direction.y * delta;
-        this.velocity += VELOCITY_INCREASE;
-        if (this.y <= 0 + this.r || this.y >= this.game_height - this.r) {
+        this.velocity += this.VELOCITY_INCREASE;
+        if (this.y - this.r <= 0 || this.y + this.r >= this.game_height) {
             this.direction.y *= -1;
         }
         if (colides_with_player && this.move != COMPUTER_MOVE) {
