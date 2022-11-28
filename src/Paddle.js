@@ -30,10 +30,18 @@ export class Paddle {
     draw() {
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
-    update(delta, height) {
-        if (this.AI) this.y += this.AI_SPEED * delta * (height - this.y - this.height / 2);
-        else this.y += this.PLAYER_SPEED * delta * (height - this.y - this.height / 2);
+    update(delta = null, height) {
+        if (delta != null) {
+            if (this.AI) this.y += this.AI_SPEED * delta * (height - this.y - this.height / 2);
+            else this.y += this.PLAYER_SPEED * delta * (height - this.y - this.height / 2);
+        } else {
+            this.y += height;
+        }
         this.calculateBoundingBox();
+        this.outOfBounds();
+        this.calculateBoundingBox();
+    }
+    outOfBounds() {
         if (this.top < 0) {
             this.y = 0;
         } else if (this.bottom > this.game_height) {
