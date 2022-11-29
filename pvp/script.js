@@ -7,8 +7,8 @@ const selected_difficulty = href?.split("?")[1]?.split("=")[1] ? href.split("?")
 const DIFFICULTIES = {
     easy: {
         difficulty: "easy",
-        ball_speed: 3000,
-        ball_speed_increase: 1000,
+        ball_speed: 4000,
+        ball_speed_increase: 2000,
         ai_speed: null,
         player_speed: null,
         paddle_height: null,
@@ -46,10 +46,21 @@ const update = (time) => {
         if (PLAYER2_UP) player2_paddle.update(null, -canvas.height / 100);
         if (PLAYER2_DOWN) player2_paddle.update(null, canvas.height / 100);
 
-        if (ball.x + ball.r <= 0 || ball.x - ball.r >= canvas.width) {
+        const outOfBoundsLeft = ball.x + ball.r <= 0;
+        const outOfBoundsRight = ball.x - ball.r >= canvas.width;
+
+        if (outOfBoundsLeft || outOfBoundsRight) {
+            if (outOfBoundsLeft) {
+                player2_paddle.score += 1;
+                document.querySelector("#right-score").innerText = player2_paddle.score;
+            } else if (outOfBoundsRight) {
+                player_paddle.score += 1;
+                document.querySelector("#left-score").innerText = player_paddle.score;
+            }
+            player_paddle.reset();
+            player2_paddle.reset();
             ball.reset();
         }
-
         ball.draw();
         player_paddle.draw();
         player2_paddle.draw();

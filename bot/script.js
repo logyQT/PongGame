@@ -66,7 +66,19 @@ const update = (time) => {
         if (PLAYER_UP) player_paddle.update(null, -canvas.height / 100);
         if (PLAYER_DOWN) player_paddle.update(null, canvas.height / 100);
 
-        if (ball.x + ball.r <= 0 || ball.x - ball.r >= canvas.width) {
+        const outOfBoundsLeft = ball.x + ball.r <= 0;
+        const outOfBoundsRight = ball.x - ball.r >= canvas.width;
+
+        if (outOfBoundsLeft || outOfBoundsRight) {
+            if (outOfBoundsLeft) {
+                computer_paddle.score += 1;
+                document.querySelector("#right-score").innerText = computer_paddle.score;
+            } else if (outOfBoundsRight) {
+                player_paddle.score += 1;
+                document.querySelector("#left-score").innerText = player_paddle.score;
+            }
+            player_paddle.reset();
+            computer_paddle.reset();
             ball.reset();
         }
 

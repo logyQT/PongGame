@@ -12,13 +12,14 @@ export class Paddle {
         } else if (pos == "right") {
             this.x = this.game_width - this.width - 10;
         }
+        this.score = 0;
         this.reset();
     }
     reset() {
         this.AI_SPEED = this.game_width / this.DIFFICULTY.ai_speed;
         this.PLAYER_SPEED = this.game_width / this.DIFFICULTY.player_speed;
 
-        this.y = this.game_height / 2;
+        this.y = this.game_height / 2 - this.height / 2;
         this.calculateBoundingBox();
     }
     calculateBoundingBox() {
